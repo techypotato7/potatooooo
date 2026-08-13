@@ -1,0 +1,111 @@
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 70 93% 62%;
+        --primary-foreground: 0 0% 0%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 40%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 70 93% 62%;
+        --radius: 0.375rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    html {
+        scroll-behavior: auto;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+    }
+    ::selection {
+        background: hsl(var(--primary));
+        color: #000;
+    }
+}
+
+@layer components {
+    .font-display {
+        font-family: 'Cabinet Grotesk', sans-serif;
+    }
+    .font-jb {
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .overline {
+        @apply font-jb text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-primary;
+    }
+    .grain {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .glass {
+        background: rgba(9, 9, 11, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-jb font-bold text-sm uppercase tracking-wider px-7 py-4 rounded-sm;
+        transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px -8px hsla(70,93%,62%,0.5);
+    }
+    .btn-ghost {
+        @apply inline-flex items-center justify-center gap-2 border border-white/20 text-foreground font-jb font-bold text-sm uppercase tracking-wider px-7 py-4 rounded-sm;
+        transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+    }
+    .btn-ghost:hover {
+        @apply border-primary text-primary;
+    }
+}
+
+@layer utilities {
+    .marquee-track {
+        animation: marquee 32s linear infinite;
+    }
+    .marquee-track-rev {
+        animation: marquee 40s linear infinite reverse;
+    }
+    @keyframes marquee {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+    .text-stroke {
+        -webkit-text-stroke: 1px hsl(var(--muted-foreground));
+        color: transparent;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .marquee-track, .marquee-track-rev { animation: none; }
+    }
+}

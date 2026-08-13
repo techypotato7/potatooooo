@@ -1,0 +1,114 @@
+{
+  "theme": "dark",
+  "art_direction": "Premium Dark Mode Neo-Brutalist with Electric Accents",
+  "archetype": "SWISS & HIGH-CONTRAST + ELECTRIC & NEON",
+  "brand_name": "Techy Potato",
+  "slogan": "YOUR VISION. OUR TECH.",
+  "colors": {
+    "background": "#09090B",
+    "foreground": "#FAFAFA",
+    "primary": "#D9F844", 
+    "primary_foreground": "#000000",
+    "secondary": "#18181B",
+    "secondary_foreground": "#FAFAFA",
+    "muted": "#27272A",
+    "muted_foreground": "#A1A1AA",
+    "border": "#27272A",
+    "card": "#09090B",
+    "css_variables": {
+      "--background": "240 10% 3.9%",
+      "--foreground": "0 0% 98%",
+      "--primary": "70 93% 62%", 
+      "--primary-foreground": "0 0% 0%",
+      "--secondary": "240 3.7% 15.9%",
+      "--secondary-foreground": "0 0% 98%",
+      "--muted": "240 3.7% 15.9%",
+      "--muted-foreground": "240 5% 64.9%",
+      "--border": "240 3.7% 15.9%",
+      "--card": "240 10% 3.9%",
+      "--card-foreground": "0 0% 98%"
+    },
+    "instructions": "Implement dark mode as default. Use #09090B (deep midnight) for background. Primary accent is an electric neon yellow (#D9F844) to provide a stark, high-end contrast to the dark theme."
+  },
+  "typography": {
+    "fonts": {
+      "headings": "'Cabinet Grotesk', sans-serif",
+      "body": "'Inter', sans-serif",
+      "labels_mono": "'JetBrains Mono', monospace"
+    },
+    "scale": {
+      "h1": "text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter uppercase",
+      "h2": "text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter",
+      "h3": "text-2xl sm:text-3xl font-bold tracking-tight",
+      "body": "text-base md:text-lg font-normal leading-relaxed",
+      "overline": "text-xs md:text-sm font-bold tracking-[0.2em] uppercase font-mono"
+    },
+    "setup_instructions": "Add Google Fonts imports for Inter and JetBrains Mono. Use Fontshare API or custom font-face for Cabinet Grotesk. Enforce tight tracking on all headings and aggressive uppercase styling for hero texts."
+  },
+  "layout_and_spacing": {
+    "spacing_philosophy": "Generous Spacing (p-8 to p-32). Use negative space aggressively to focus attention on typography and select images.",
+    "grid_system": "Bento Grid Protocol. Use grid-cols-1 md:grid-cols-12 for major sections. Overlap elements to break grid symmetry.",
+    "section_padding": "py-24 md:py-32 for main sections. Ensure seamless transitions between sections."
+  },
+  "motion_and_interactions": {
+    "libraries": ["framer-motion", "lenis"],
+    "hero_reveal": "Masked line-by-line reveal using Framer Motion (initial y: 100%, clipPath/overflow hidden wrappers).",
+    "scroll_effects": "Use Lenis for smooth momentum scrolling. Implement parallax scroll on abstract images.",
+    "hover_states": "Micro-interactions on all cards (subtle scale, border color shift to primary). Magnetic button effect for primary CTAs."
+  },
+  "visual_enhancers": {
+    "glassmorphism": "Used selectively on Sticky Header: backdrop-blur-xl bg-black/60 border-b border-white/10.",
+    "borders": "1px solid #27272A (border-border). Sharp edges or very slight rounding (rounded-md max).",
+    "textures": "Include a subtle noise/grain SVG overlay across the entire page with pointer-events-none and opacity-20."
+  },
+  "components": {
+    "hero": "Massive typography. Slogan 'YOUR VISION. OUR TECH.' broken onto multiple lines with kinetic reveal. Floating 3D abstract object or subtle glowing gradient orb in background.",
+    "marquee": "Slow editorial marquee reading 'TECHY POTATO • AWARD WINNING DIGITAL AGENCY • ' separated by stars. Font-mono, text-sm, muted text color.",
+    "about_services": "Bento grid layout. High contrast cards. Hover reveals more text. Use Phosphor Icons (duotone or thin).",
+    "testimonials": "Editorial layout, massive quotes with 'Cabinet Grotesk', small client avatars. No generic carousels; use a staggered list or a fade-in-place transition.",
+    "footer": "Massive footer typography. Darkest background. High contrast links."
+  },
+  "images": [
+    {
+      "category": "hero_abstract_3d",
+      "url": "https://images.unsplash.com/photo-1754738797051-4e0c6983473a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwzfHx0ZWNoJTIwYWJzdHJhY3QlMjAzZHxlbnwwfHx8fDE3ODY2MzAyOTB8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract metallic sculpture for premium hero 3D accent"
+    },
+    {
+      "category": "services_neon_fluid",
+      "url": "https://images.unsplash.com/photo-1763932229096-c4a0411bf966?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxkaWdpdGFsJTIwYWJzdHJhY3QlMjBmbHVpZCUyMG5lb258ZW58MHx8fHwxNzg2NjMwMzAxfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Neon abstract fluid for technology services card background"
+    },
+    {
+      "category": "office_team",
+      "url": "https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODF8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBjcmVhdGl2ZSUyMG9mZmljZXxlbnwwfHx8fDE3ODY2MzAyOTB8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Creative modern office for 'About Us' section"
+    },
+    {
+      "category": "testimonials_team",
+      "url": "https://images.unsplash.com/photo-1758518731722-320023fb8e66?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBzbWlsaW5nJTIwdGVhbXxlbnwwfHx8fDE3ODY2MzAyOTB8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Smiling professional team for Client Testimonials or Why Choose Us"
+    }
+  ],
+  "accessibility": {
+    "contrast": "Ensure primary neon text meets 4.5:1 ratio against dark background. Use black text inside primary-colored buttons.",
+    "motion": "Respect prefers-reduced-motion CSS media query for all framer-motion animations.",
+    "testing": "All interactive elements MUST include data-testid (e.g., data-testid='hero-cta-button')."
+  },
+  "universal_guidelines": [
+    "You MUST NOT apply universal transition (transition: all). Target specific properties.",
+    "DO NOT use pure transparent backgrounds if content scrolls behind it. Always use backdrop-blur + semi-transparent bg.",
+    "DO NOT add `.App { text-align: center; }`.",
+    "Ensure buttons are sharp or subtly rounded (rounded-sm) to match the neo-brutalist vibe, with distinct hover states.",
+    "Use Phosphor icons or Lucide icons for sharp, premium iconography."
+  ],
+  "instructions_to_main_agent": [
+    "Install framer-motion, @studio-freight/react-lenis (or lenis), lucide-react (or @phosphor-icons/react).",
+    "Update tailwind.config.js to support the custom colors and extended spacing.",
+    "Inject a grain/noise SVG pattern across the App.",
+    "Build a masked text reveal animation component for the hero text 'YOUR VISION. OUR TECH.'",
+    "Create a Marquee component using framer-motion or a simple CSS keyframe.",
+    "Implement Sections: Hero, About, Services, Why Us, Portfolio, Testimonials, Process, Pricing, FAQ, Contact, Footer.",
+    "Do NOT use generic shadcn cards if they compromise the custom editorial aesthetic. Build custom raw div/section layouts with Tailwind."
+  ]
+}
