@@ -72,7 +72,7 @@ export default function Contact() {
             <Reveal delay={0.4}>
               <div className="mt-8 flex flex-wrap gap-3">
                 {CONTACT.socials.map((s) => (
-                  <a key={s.label} href={s.href} data-testid={`social-${s.label.toLowerCase().replace(/[^a-z]/g, "")}`} className="font-jb text-xs uppercase tracking-widest border border-border rounded-sm px-4 py-2.5 hover:border-primary hover:text-primary transition-colors">
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" data-testid={`social-${s.label.toLowerCase().replace(/[^a-z]/g, "")}`} className="font-jb text-xs uppercase tracking-widest border border-border rounded-sm px-4 py-2.5 hover:border-primary hover:text-primary transition-colors">
                     {s.label}
                   </a>
                 ))}

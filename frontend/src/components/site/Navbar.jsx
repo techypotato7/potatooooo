@@ -36,9 +36,13 @@ export default function Navbar() {
       data-testid="site-navbar"
     >
       <div className="mx-auto max-w-7xl px-5 md:px-8 h-16 md:h-20 flex items-center justify-between">
-        <button onClick={() => go("#top")} data-testid="nav-logo" className="flex items-center gap-2 group">
-          <span className="h-2.5 w-2.5 rounded-full bg-primary group-hover:scale-125 transition-transform" />
-          <span className="font-display font-extrabold text-lg tracking-tight">Techy Potato</span>
+        <button onClick={() => go("#top")} data-testid="nav-logo" className="flex items-center gap-2.5 group">
+          <img
+            src="/techy-potato-logo.jpeg"
+            alt="Techy Potato"
+            className="h-9 md:h-10 w-auto rounded-md ring-1 ring-white/10 group-hover:ring-primary/50 transition-[box-shadow,transform] duration-300 group-hover:scale-105"
+          />
+          <span className="font-display font-extrabold text-base md:text-lg tracking-tight">Techy Potato</span>
         </button>
 
         <nav className="hidden lg:flex items-center gap-8">

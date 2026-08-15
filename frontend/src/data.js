@@ -70,11 +70,13 @@ export const FAQS = [
 
 export const CONTACT = {
   phone: "+91 79736 96769",
-  email: "hello@techypotato.com",
+  email: "techypotato7@gmail.com",
   address: "India · Serving clients worldwide",
+  whatsapp: "https://wa.me/917973696769?text=Hi%20Techy%20Potato!%20I'd%20like%20to%20discuss%20a%20project.",
   socials: [
     { label: "Instagram", href: "https://www.instagram.com/techypotato7?igsh=MWdhcDlzNDRweTk1bQ==" },
-    { label: "Facebook", href: "https://www.facebook.com/techypotato" },
+    { label: "Facebook", href: "https://www.facebook.com/techypotato7" },
     { label: "WhatsApp", href: "https://wa.me/917973696769" },
+    { label: "Email", href: "mailto:techypotato7@gmail.com" },
   ],
 };

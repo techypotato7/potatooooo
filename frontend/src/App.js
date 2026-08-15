@@ -15,6 +15,8 @@ import Pricing from "@/components/site/Pricing";
 import FAQ from "@/components/site/FAQ";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
+import WhatsAppFloat from "@/components/site/WhatsAppFloat";
+import LegalModal from "@/components/site/LegalModal";
 
 function App() {
   useEffect(() => {
@@ -52,6 +54,8 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppFloat />
+      <LegalModal />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import { CONTACT } from "@/data";
 import { scrollTo } from "@/components/site/Navbar";
+import { openLegal } from "@/lib/legal";
 
 const QUICK = [
   ["About", "#about"], ["Services", "#services"], ["Work", "#work"],
@@ -47,7 +48,7 @@ export default function Footer() {
             </ul>
             <div className="mt-6 flex flex-wrap gap-3">
               {CONTACT.socials.map((s) => (
-                <a key={s.label} href={s.href} className="font-jb text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">{s.label}</a>
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" data-testid={`footer-social-${s.label.toLowerCase()}`} className="font-jb text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">{s.label}</a>
               ))}
             </div>
           </div>
@@ -56,8 +57,8 @@ export default function Footer() {
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground font-jb uppercase tracking-widest">
           <span>© {year} Techy Potato. All rights reserved.</span>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-primary transition-colors" data-testid="footer-privacy">Privacy Policy</a>
-            <a href="#" className="hover:text-primary transition-colors" data-testid="footer-terms">Terms</a>
+            <button onClick={() => openLegal("privacy")} className="hover:text-primary transition-colors uppercase tracking-widest" data-testid="footer-privacy">Privacy Policy</button>
+            <button onClick={() => openLegal("terms")} className="hover:text-primary transition-colors uppercase tracking-widest" data-testid="footer-terms">Terms</button>
           </div>
         </div>
       </div>
