@@ -23,7 +23,7 @@ export default function Services() {
           </Reveal>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border border border-border rounded-md overflow-hidden">
+        <div className="grid sm:grid-cols-2 gap-px bg-border border border-border rounded-md overflow-hidden">
           {SERVICES.map((s, i) => {
             const Icon = s.icon;
             return (
@@ -32,7 +32,7 @@ export default function Services() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6, delay: (i % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
                 className="group relative bg-background p-8 md:p-9 min-h-[220px] flex flex-col justify-between hover:bg-secondary/40 transition-colors duration-500"
                 data-testid={`service-card-${i}`}
               >
