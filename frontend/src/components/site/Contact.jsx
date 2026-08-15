@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, ArrowUpRight, Loader2, Lock } from "lucide-react";
 import { Reveal } from "@/lib/anim";
-import { CONTACT } from "@/data";
+import { CONTACT, FORM_SERVICES } from "@/data";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "", company_website: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "", company_website: "" });
+  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const toggleService = (s) =>
+    setServices((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
 
   const submit = async (e) => {
     e.preventDefault();
@@ -19,17 +23,30 @@ export default function Contact() {
       toast.error("Please fill in your name, email and message.");
       return;
     }
+
+    // Build a professional WhatsApp message and open it (works on mobile app + web).
+    const waText =
+      `🥔 *New Project Enquiry — Techy Potato*\n\n` +
+      `👤 *Name:* ${form.name}\n` +
+      `📧 *Email:* ${form.email}\n` +
+      `📱 *Phone:* ${form.phone || "N/A"}\n` +
+      `🧩 *Services:* ${services.length ? services.join(", ") : "Not specified"}\n` +
+      `📝 *Project:* ${form.message}\n` +
+      `🕒 *Sent:* ${new Date().toLocaleString("en-IN")}`;
+    const waUrl = `https://wa.me/917973696769?text=${encodeURIComponent(waText)}`;
+    // open synchronously within the click gesture to avoid popup blocking
+    window.open(waUrl, "_blank", "noopener,noreferrer");
+    toast.success("Opening WhatsApp with your requirements…");
+
+    // save the lead in the background for your records
     setLoading(true);
     try {
-      await axios.post(`${API}/contact`, form);
-      toast.success("Thanks! We'll get back to you within 24 hours.");
-      setForm({ name: "", email: "", phone: "", service: "", message: "", company_website: "" });
+      await axios.post(`${API}/contact`, { ...form, services });
     } catch (err) {
-      const msg = err?.response?.status === 429
-        ? "Too many submissions. Please try again in a little while."
-        : "Something went wrong. Please try again.";
-      toast.error(msg);
+      // saving is best-effort; the WhatsApp message has already opened
     } finally {
+      setForm({ name: "", email: "", phone: "", message: "", company_website: "" });
+      setServices([]);
       setLoading(false);
     }
   };
@@ -107,8 +124,31 @@ export default function Contact() {
                 <div className="sm:col-span-1">
                   <input className={inputCls} placeholder="Phone (optional)" value={form.phone} onChange={set("phone")} data-testid="input-phone" />
                 </div>
-                <div className="sm:col-span-1">
-                  <input className={inputCls} placeholder="Service you need" value={form.service} onChange={set("service")} data-testid="input-service" />
+                <div className="sm:col-span-2">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-jb text-xs uppercase tracking-widest text-muted-foreground">Services you need — select one or more</span>
+                    {services.length > 0 && (
+                      <span className="font-jb text-xs text-primary" data-testid="services-count">{services.length} selected</span>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2 max-h-56 overflow-y-auto pr-1" data-testid="service-selector">
+                    {FORM_SERVICES.map((s, i) => {
+                      const active = services.includes(s);
+                      return (
+                        <motion.button
+                          type="button"
+                          key={s}
+                          onClick={() => toggleService(s)}
+                          whileTap={{ scale: 0.94 }}
+                          data-testid={`service-pill-${i}`}
+                          aria-pressed={active}
+                          className={`font-jb text-xs rounded-full px-3.5 py-2 border transition-colors duration-300 ${active ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-primary/60 hover:text-foreground"}`}
+                        >
+                          {s}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div className="sm:col-span-2">
                   <textarea rows={4} className={`${inputCls} resize-none`} placeholder="Tell us about your project" value={form.message} onChange={set("message")} data-testid="input-message" />
@@ -118,7 +158,7 @@ export default function Contact() {
                     {loading ? <><Loader2 size={18} className="animate-spin" /> Sending…</> : <>Send Requirements <ArrowUpRight size={18} /></>}
                   </button>
                   <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                    <Lock size={13} className="text-primary" /> Secured over HTTPS. Your details stay private and are never shared.
+                    <Lock size={13} className="text-primary" /> Opens WhatsApp to send your details securely. Your info stays private and is never shared.
                   </p>
                 </div>
               </form>

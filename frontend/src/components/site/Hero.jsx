@@ -4,7 +4,6 @@ import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { Magnetic } from "@/lib/anim";
 import { scrollTo } from "@/components/site/Navbar";
 import ParticleField from "@/components/site/ParticleField";
-import NeonPotato from "@/components/site/NeonPotato";
 
 const EASE = [0.16, 1, 0.3, 1];
 const TAGLINE = "YOUR VISION. OUR TECH.";
@@ -13,10 +12,10 @@ export default function Hero() {
   const ref = useRef(null);
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
-  const srx = useSpring(rx, { stiffness: 120, damping: 18 });
-  const sry = useSpring(ry, { stiffness: 120, damping: 18 });
-  const rotX = useTransform(srx, [-0.5, 0.5], [6, -6]);
-  const rotY = useTransform(sry, [-0.5, 0.5], [-6, 6]);
+  const srx = useSpring(rx, { stiffness: 110, damping: 18 });
+  const sry = useSpring(ry, { stiffness: 110, damping: 18 });
+  const rotX = useTransform(srx, [-0.5, 0.5], [7, -7]);
+  const rotY = useTransform(sry, [-0.5, 0.5], [-7, 7]);
 
   const onMove = (e) => {
     const r = ref.current.getBoundingClientRect();
@@ -32,14 +31,12 @@ export default function Hero() {
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden pt-24 pb-16"
-      style={{ perspective: 1000 }}
+      style={{ perspective: 1100 }}
     >
       <div className="absolute inset-0 -z-10">
-        <ParticleField color="70,150,255" />
+        <ParticleField color="217,248,68" />
       </div>
-      {/* soft blue light streaks / ambient depth */}
-      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[620px] w-[620px] rounded-full bg-[#2E7BFF]/14 blur-[160px]" aria-hidden />
-      <div className="absolute -z-10 -top-24 right-10 h-[360px] w-[220px] rotate-12 bg-[#3B9EFF]/8 blur-[120px]" aria-hidden />
+      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/12 blur-[160px]" aria-hidden />
       <div className="absolute -z-10 inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_82%)]" aria-hidden />
 
       <div className="mx-auto max-w-4xl w-full px-5 md:px-8 flex flex-col items-center text-center">
@@ -49,37 +46,64 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="flex items-center gap-3 mb-6"
         >
-          <span className="h-px w-8 bg-[#3B9EFF]" />
-          <span className="font-jb text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-[#7fbcff]">Digital Marketing & Technology Agency</span>
-          <span className="h-px w-8 bg-[#3B9EFF]" />
+          <span className="h-px w-8 bg-primary" />
+          <span className="overline">Digital Marketing & Technology Agency</span>
+          <span className="h-px w-8 bg-primary" />
         </motion.div>
 
-        {/* animated blue circuit network with cursor-driven 3D tilt */}
+        {/* neon potato hero image with float + cursor tilt + energy sweep */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.88 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.6, ease: EASE }}
+          transition={{ duration: 1.3, ease: EASE }}
           style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d" }}
-          className="relative w-full h-[280px] sm:h-[360px] lg:h-[420px]"
+          className="relative w-full h-[300px] sm:h-[380px] lg:h-[460px] flex items-center justify-center"
         >
-          <NeonPotato />
+          {/* pulsing glow behind */}
+          <motion.div
+            aria-hidden
+            animate={{ opacity: [0.35, 0.7, 0.35], scale: [0.92, 1.02, 0.92] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute h-[70%] w-[55%] rounded-full bg-primary/25 blur-[70px]"
+          />
+          <motion.img
+            src="/hero-potato-neon.jpeg"
+            alt="Techy Potato — neon circuit network"
+            data-testid="hero-image"
+            draggable={false}
+            animate={{ y: [0, -14, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="relative z-10 h-full w-auto object-contain select-none pointer-events-none"
+            style={{ filter: "drop-shadow(0 0 30px rgba(217,248,68,0.3))", mixBlendMode: "screen" }}
+          />
+          {/* energy light sweep */}
+          <div className="absolute inset-0 z-20 overflow-hidden pointer-events-none">
+            <motion.div
+              aria-hidden
+              initial={{ x: "-120%" }}
+              animate={{ x: "160%" }}
+              transition={{ duration: 3.2, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
+              className="absolute top-0 h-full w-1/4 -skew-x-12"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(217,248,68,0.18), transparent)", mixBlendMode: "screen" }}
+            />
+          </div>
         </motion.div>
 
-        {/* metallic wordmark with one-time sheen sweep */}
+        {/* wordmark */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 2.4, ease: EASE }}
-          className="font-display font-black uppercase tracking-tighter leading-[0.9] text-[15vw] sm:text-[11vw] lg:text-8xl -mt-2 wordmark-sheen"
+          transition={{ duration: 1, delay: 0.5, ease: EASE }}
+          className="font-display font-black uppercase tracking-tighter leading-[0.9] text-[15vw] sm:text-[11vw] lg:text-8xl -mt-2"
         >
-          Techy Potato
+          Techy <span className="text-primary">Potato</span>
         </motion.h1>
 
         {/* tagline — character by character */}
         <motion.p
           initial="hidden"
           animate="show"
-          variants={{ show: { transition: { delayChildren: 3.4, staggerChildren: 0.045 } } }}
+          variants={{ show: { transition: { delayChildren: 0.9, staggerChildren: 0.045 } } }}
           className="mt-4 font-jb text-sm sm:text-base tracking-[0.35em] uppercase"
           aria-label={TAGLINE}
         >
@@ -88,7 +112,7 @@ export default function Hero() {
               key={i}
               variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
               transition={{ duration: 0.4, ease: EASE }}
-              className={i >= TAGLINE.indexOf("OUR") ? "text-[#3B9EFF]" : "text-muted-foreground"}
+              className={i >= TAGLINE.indexOf("OUR") ? "text-primary" : "text-muted-foreground"}
               aria-hidden="true"
             >
               {ch === " " ? "\u00A0" : ch}
@@ -99,7 +123,7 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 3.9 }}
+          transition={{ duration: 1, delay: 1.4 }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed"
         >
           We build complete digital solutions — websites, apps, AI, branding and marketing — that help
@@ -109,7 +133,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 4.1 }}
+          transition={{ duration: 1, delay: 1.6 }}
           className="mt-9 flex flex-wrap items-center justify-center gap-4"
         >
           <Magnetic>
@@ -126,7 +150,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 4.4 }}
+        transition={{ delay: 2 }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground"
       >
         <span className="font-jb text-[10px] tracking-[0.3em] uppercase">Scroll</span>

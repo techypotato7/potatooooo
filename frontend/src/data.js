@@ -20,6 +20,33 @@ export const SERVICES = [
   { icon: Rocket, title: "Digital Growth Solutions", desc: "End-to-end online presence strategy to accelerate your growth." },
 ];
 
+export const FORM_SERVICES = [
+  "Website Development",
+  "E-commerce Website",
+  "Mobile App Development",
+  "AI Solutions",
+  "AI Chatbots",
+  "Website Maintenance",
+  "SEO",
+  "GEO",
+  "Google Business Profile Setup & Optimization",
+  "WhatsApp Business Setup",
+  "Digital Marketing",
+  "Social Media Management",
+  "Social Media Post Design",
+  "Logo Design and Brand Identity",
+  "Graphic Design",
+  "Video Editing",
+  "Photo Editing",
+  "YouTube Thumbnail Design",
+  "YouTube Channel Branding",
+  "QR Menu Design",
+  "Digital Visiting Cards",
+  "Business Consultation",
+  "Automation and Workflow Integration",
+  "Custom Services",
+];
+
 export const WHY_US = [
   { k: "01", title: "Strategy First", desc: "Every pixel serves a purpose. We design around your goals, not trends." },
   { k: "02", title: "Full-Stack Studio", desc: "Design, code, marketing and AI under one roof — no handoff gaps." },

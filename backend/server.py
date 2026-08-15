@@ -6,12 +6,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import time
 import logging
+import httpx
 from pathlib import Path
 from collections import defaultdict, deque
 from pydantic import BaseModel, Field, EmailStr, ConfigDict, constr
 from typing import List, Optional
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 
 ROOT_DIR = Path(__file__).parent
@@ -30,8 +31,10 @@ db = client[os.environ['DB_NAME']]
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
+IST = timezone(timedelta(hours=5, minutes=30))
 
-# ---- Security headers middleware ----
+
+# ---- Security headers ----
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         response = await call_next(request)
@@ -44,10 +47,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
-# ---- Simple in-memory rate limiter for contact submissions ----
+# ---- Rate limiter ----
 _RATE = defaultdict(deque)
-RATE_LIMIT = 5          # max submissions
-RATE_WINDOW = 600       # per 10 minutes
+RATE_LIMIT = 5
+RATE_WINDOW = 600
 
 
 def _client_ip(request: Request) -> str:
@@ -74,19 +77,91 @@ class Lead(BaseModel):
     name: str
     email: EmailStr
     phone: Optional[str] = ""
-    service: Optional[str] = ""
+    services: List[str] = Field(default_factory=list)
     message: str
+    ip: Optional[str] = ""
+    whatsapp_sent: bool = False
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 class LeadCreate(BaseModel):
-    name: constr(strip_whitespace=True, min_length=1, max_length=100)
+    name: constr(strip_whitespace=True, min_length=1, max_length=120)
     email: EmailStr
-    phone: constr(strip_whitespace=True, max_length=30) = ""
-    service: constr(strip_whitespace=True, max_length=120) = ""
-    message: constr(strip_whitespace=True, min_length=1, max_length=2000)
-    # honeypot: real users leave this empty; bots tend to fill it
-    company_website: Optional[str] = ""
+    phone: constr(strip_whitespace=True, max_length=40) = ""
+    services: List[constr(strip_whitespace=True, max_length=120)] = Field(default_factory=list, max_length=30)
+    message: constr(strip_whitespace=True, min_length=1, max_length=4000)
+    company_website: Optional[str] = ""   # honeypot
+
+
+async def send_whatsapp_notification(lead: Lead) -> bool:
+    """Send a WhatsApp notification to the business owner. Graceful no-op if unconfigured."""
+    token = os.environ.get("WHATSAPP_ACCESS_TOKEN")
+    phone_id = os.environ.get("WHATSAPP_PHONE_NUMBER_ID")
+    recipient = os.environ.get("WHATSAPP_RECIPIENT_NUMBER")
+    api_version = os.environ.get("WHATSAPP_API_VERSION", "v25.0")
+    template_name = os.environ.get("WHATSAPP_TEMPLATE_NAME")
+    template_lang = os.environ.get("WHATSAPP_TEMPLATE_LANGUAGE", "en_US")
+
+    if not (token and phone_id and recipient):
+        logger.info("WhatsApp not configured; notification skipped (lead saved).")
+        return False
+
+    endpoint = f"https://graph.facebook.com/{api_version}/{phone_id}/messages"
+    submitted = datetime.now(IST).strftime("%d %b %Y, %I:%M %p IST")
+    services = ", ".join(lead.services) if lead.services else "Not specified"
+
+    if template_name:
+        # Business-initiated: requires an approved Utility template with 7 body variables.
+        values = [lead.name, lead.email, lead.phone or "N/A", services, lead.message, submitted, lead.ip or "N/A"]
+        payload = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": recipient,
+            "type": "template",
+            "template": {
+                "name": template_name,
+                "language": {"code": template_lang},
+                "components": [{
+                    "type": "body",
+                    "parameters": [{"type": "text", "text": str(v)} for v in values],
+                }],
+            },
+        }
+    else:
+        # Free-form text (only delivers inside the 24h customer-service window — good for testing).
+        body = (
+            "🥔 *New Lead — Techy Potato*\n\n"
+            f"👤 *Name:* {lead.name}\n"
+            f"📧 *Email:* {lead.email}\n"
+            f"📱 *Phone:* {lead.phone or 'N/A'}\n"
+            f"🧩 *Services:* {services}\n"
+            f"📝 *Project:* {lead.message}\n"
+            f"🕒 *Submitted:* {submitted}\n"
+            f"🌐 *IP:* {lead.ip or 'N/A'}"
+        )
+        payload = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": recipient,
+            "type": "text",
+            "text": {"preview_url": False, "body": body},
+        }
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as http:
+            resp = await http.post(
+                endpoint,
+                headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+                json=payload,
+            )
+        if resp.is_success:
+            logger.info("WhatsApp notification accepted by Meta.")
+            return True
+        logger.error("WhatsApp send failed: status=%s body=%s", resp.status_code, resp.text[:400])
+        return False
+    except httpx.HTTPError as exc:
+        logger.error("WhatsApp request error: %s", exc)
+        return False
 
 
 @api_router.get("/")
@@ -96,11 +171,11 @@ async def root():
 
 @api_router.post("/contact", response_model=Lead)
 async def create_lead(payload: LeadCreate, request: Request):
-    # spam honeypot — silently accept without storing
+    # honeypot — silently accept without storing or notifying
     if payload.company_website:
         logger.info("Honeypot triggered from %s — dropping submission", _client_ip(request))
         return Lead(name=payload.name, email=payload.email, phone=payload.phone,
-                    service=payload.service, message=payload.message)
+                    services=payload.services, message=payload.message)
 
     ip = _client_ip(request)
     if not _rate_ok(ip):
@@ -109,10 +184,13 @@ async def create_lead(payload: LeadCreate, request: Request):
 
     lead = Lead(
         name=payload.name, email=payload.email, phone=payload.phone,
-        service=payload.service, message=payload.message,
+        services=payload.services, message=payload.message, ip=ip,
     )
+    # Persist first — a WhatsApp/Meta outage must never lose the lead.
     await db.leads.insert_one(lead.model_dump())
-    logger.info("New lead captured: %s <%s>", lead.name, lead.email)
+    lead.whatsapp_sent = await send_whatsapp_notification(lead)
+    await db.leads.update_one({"id": lead.id}, {"$set": {"whatsapp_sent": lead.whatsapp_sent}})
+    logger.info("New lead captured: %s <%s> | whatsapp_sent=%s", lead.name, lead.email, lead.whatsapp_sent)
     return lead
 
 
