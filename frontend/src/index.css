@@ -108,4 +108,20 @@
     @media (prefers-reduced-motion: reduce) {
         .marquee-track, .marquee-track-rev { animation: none; }
     }
+    .wordmark-sheen {
+        background: linear-gradient(100deg, #c9d2dc 0%, #c9d2dc 38%, #ffffff 50%, #c9d2dc 62%, #c9d2dc 100%);
+        background-size: 260% 100%;
+        background-position: 130% 0;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: sheen 2.6s cubic-bezier(0.16,1,0.3,1) 2.6s 1 forwards;
+    }
+    @keyframes sheen {
+        from { background-position: 130% 0; }
+        to { background-position: -30% 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .wordmark-sheen { animation: none; background-position: 50% 0; }
+    }
 }

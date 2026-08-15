@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { Phone, Mail, MapPin, ArrowUpRight, Loader2 } from "lucide-react";
+import { Phone, Mail, MapPin, ArrowUpRight, Loader2, Lock } from "lucide-react";
 import { Reveal } from "@/lib/anim";
 import { CONTACT } from "@/data";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "", company_website: "" });
   const [loading, setLoading] = useState(false);
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
@@ -23,9 +23,12 @@ export default function Contact() {
     try {
       await axios.post(`${API}/contact`, form);
       toast.success("Thanks! We'll get back to you within 24 hours.");
-      setForm({ name: "", email: "", phone: "", service: "", message: "" });
+      setForm({ name: "", email: "", phone: "", service: "", message: "", company_website: "" });
     } catch (err) {
-      toast.error("Something went wrong. Please try again.");
+      const msg = err?.response?.status === 429
+        ? "Too many submissions. Please try again in a little while."
+        : "Something went wrong. Please try again.";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -84,6 +87,17 @@ export default function Contact() {
           <div className="lg:col-span-7">
             <Reveal delay={0.15}>
               <form onSubmit={submit} className="grid sm:grid-cols-2 gap-6" data-testid="contact-form">
+                {/* honeypot — hidden from users, traps bots */}
+                <input
+                  type="text"
+                  name="company_website"
+                  value={form.company_website}
+                  onChange={set("company_website")}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute left-[-9999px] w-px h-px opacity-0"
+                />
                 <div className="sm:col-span-1">
                   <input className={inputCls} placeholder="Your name" value={form.name} onChange={set("name")} data-testid="input-name" />
                 </div>
@@ -103,6 +117,9 @@ export default function Contact() {
                   <button type="submit" disabled={loading} className="btn-primary w-full sm:w-auto" data-testid="contact-submit">
                     {loading ? <><Loader2 size={18} className="animate-spin" /> Sending…</> : <>Send Requirements <ArrowUpRight size={18} /></>}
                   </button>
+                  <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                    <Lock size={13} className="text-primary" /> Secured over HTTPS. Your details stay private and are never shared.
+                  </p>
                 </div>
               </form>
             </Reveal>

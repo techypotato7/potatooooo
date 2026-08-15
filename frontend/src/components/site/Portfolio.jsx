@@ -34,13 +34,17 @@ export default function Portfolio() {
                 <img
                   src={p.img}
                   alt={p.title}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
               </div>
               <div className="absolute bottom-0 inset-x-0 p-7 flex items-end justify-between">
                 <div>
-                  <div className="font-jb text-xs uppercase tracking-widest text-primary">{p.cat}</div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-jb text-xs uppercase tracking-widest text-primary">{p.cat}</span>
+                    <span className="font-jb text-[10px] uppercase tracking-widest text-foreground/80 border border-primary/40 rounded-full px-2.5 py-1 bg-primary/10">{p.result}</span>
+                  </div>
                   <h3 className="mt-2 font-display font-bold text-2xl md:text-3xl tracking-tight">{p.title}</h3>
                 </div>
                 <span className="h-11 w-11 shrink-0 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors duration-500">

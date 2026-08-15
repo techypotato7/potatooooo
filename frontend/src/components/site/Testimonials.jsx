@@ -19,13 +19,21 @@ export default function Testimonials() {
           {TESTIMONIALS.map((t, i) => (
             <Reveal key={t.name} delay={i * 0.12}>
               <figure className="h-full bg-background border border-border rounded-md p-8 md:p-10 flex flex-col justify-between hover:border-primary/50 transition-colors duration-500" data-testid={`testimonial-${i}`}>
-                <span className="font-display text-6xl leading-none text-primary">“</span>
-                <blockquote className="mt-2 font-display font-medium text-xl md:text-2xl tracking-tight leading-snug">
-                  {t.quote}
-                </blockquote>
-                <figcaption className="mt-8 pt-6 border-t border-border">
-                  <div className="font-bold">{t.name}</div>
-                  <div className="font-jb text-xs uppercase tracking-widest text-muted-foreground mt-1">{t.role}</div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-display text-6xl leading-none text-primary">“</span>
+                    <span className="font-jb text-xs uppercase tracking-widest text-primary-foreground bg-primary rounded-full px-3 py-1.5">{t.result}</span>
+                  </div>
+                  <blockquote className="mt-2 font-display font-medium text-xl md:text-2xl tracking-tight leading-snug">
+                    {t.quote}
+                  </blockquote>
+                </div>
+                <figcaption className="mt-8 pt-6 border-t border-border flex items-center gap-4">
+                  <img src={t.avatar} alt={t.name} className="h-12 w-12 rounded-full object-cover border border-primary/40" loading="lazy" />
+                  <div>
+                    <div className="font-bold">{t.name}</div>
+                    <div className="font-jb text-xs uppercase tracking-widest text-muted-foreground mt-0.5">{t.role}</div>
+                  </div>
                 </figcaption>
               </figure>
             </Reveal>

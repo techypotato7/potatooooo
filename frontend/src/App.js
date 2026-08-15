@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
 import Marquee from "@/components/site/Marquee";
+import TrustBadges from "@/components/site/TrustBadges";
 import About from "@/components/site/About";
 import Services from "@/components/site/Services";
 import WhyUs from "@/components/site/WhyUs";
@@ -13,6 +14,7 @@ import Process from "@/components/site/Process";
 import Testimonials from "@/components/site/Testimonials";
 import Pricing from "@/components/site/Pricing";
 import FAQ from "@/components/site/FAQ";
+import ConsultationCTA from "@/components/site/ConsultationCTA";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
 import WhatsAppFloat from "@/components/site/WhatsAppFloat";
@@ -43,6 +45,7 @@ function App() {
       <main>
         <Hero />
         <Marquee />
+        <TrustBadges />
         <About />
         <Services />
         <WhyUs />
@@ -51,6 +54,7 @@ function App() {
         <Testimonials />
         <Pricing />
         <FAQ />
+        <ConsultationCTA />
         <Contact />
       </main>
       <Footer />

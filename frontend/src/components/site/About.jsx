@@ -1,9 +1,8 @@
 import React from "react";
 import { Reveal, Counter } from "@/lib/anim";
-import { STATS } from "@/data";
+import { STATS, ABOUT_VISUAL } from "@/data";
 
-const ABOUT_IMG =
-  "https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200";
+const ABOUT_IMG = ABOUT_VISUAL;
 
 export default function About() {
   return (
@@ -37,7 +36,7 @@ export default function About() {
           <div className="lg:col-span-5">
             <Reveal delay={0.15}>
               <div className="relative overflow-hidden rounded-md border border-border">
-                <img src={ABOUT_IMG} alt="Techy Potato creative studio" className="w-full h-72 lg:h-80 object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                <img src={ABOUT_IMG} alt="Techy Potato — branded neon network" loading="lazy" className="w-full h-72 lg:h-80 object-cover transition-transform duration-700 hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />
               </div>
             </Reveal>

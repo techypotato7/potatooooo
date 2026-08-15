@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-export default function ParticleField() {
+export default function ParticleField({ color = "217,248,68" }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function ParticleField() {
         if (p.y < 0 || p.y > h) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(217,248,68,0.55)";
+        ctx.fillStyle = `rgba(${color},0.55)`;
         ctx.fill();
       }
       const MAX = 15000;
@@ -52,7 +52,7 @@ export default function ParticleField() {
           const d = dx * dx + dy * dy;
           if (d < MAX) {
             const o = (1 - d / MAX) * 0.16;
-            ctx.strokeStyle = `rgba(217,248,68,${o})`;
+            ctx.strokeStyle = `rgba(${color},${o})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
